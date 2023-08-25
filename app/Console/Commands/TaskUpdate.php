@@ -27,30 +27,30 @@ class TaskUpdate extends Command
      */
     public function handle()
     {
-             DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $client     = new  Client();
-            $responce   = $client->get(env('APIURL'));
+            $responce   = $client->get(env('APIURL'), ['verify' => false]);
             $status     = $responce->getStatusCode();
             $tasks      = json_decode($responce->getBody(),true);
             
             if ($status == 200) {
                 if (count($tasks)) {
-                 foreach ($tasks as $key => $task) {
-                     $task = Task::updateOrCreate([
+                   foreach ($tasks as $key => $task) {
+                       $task = Task::updateOrCreate([
                         'api_id' => $task['id']
                     ], [
                         'title' => substr($task['title'], 0,10),
                         'description' => $task['title'],
                         'status' => ($task['completed'] == true ? "completed" : "pending"),
                     ]);
-                 }
-             }
-         }
-         DB::commit();
-     } catch (Exception $e) {
+                   }
+               }
+           }
+           DB::commit();
+       } catch (Exception $e) {
         
 
-     }
-    }
+       }
+   }
 }

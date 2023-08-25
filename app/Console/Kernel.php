@@ -15,12 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
-          $schedule->command('task:update')
-                ->everyFiveMinutes1();
+      $schedule->command('task:update')
+      ->everyFiveMinutes1();
                 // ->pingOnSuccess($ulr); // URL will call on Success
                 // ->pingOnFailure($ulr); // URL will Call on failure we can send email alart or logs alse on failure 
-    }
+  }
 
     /**
      * Register the commands for the application.

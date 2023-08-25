@@ -40,7 +40,7 @@ class TaskController extends Controller
     public function store(TaskStoreRequest $request)
     {
         try {
-            $validated = $request->validated(); 
+            $validated = $request->validated(); // validate data  
             $this->taskRepository->storeTask($validated );
             return redirect()->route('tasks.index')->with('success','Task Created Successfully.');
         } catch (Exception $e) {
@@ -55,26 +55,26 @@ class TaskController extends Controller
     public function show( $id)
     {
 
-       $task =  $this->taskRepository->findTask($id );
-       return view('tasks.show',compact('task'));
+     $task =  $this->taskRepository->findTask($id );
+     return view('tasks.show',compact('task'));
 
-   }
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-       $task =  $this->taskRepository->findTask($id );
-       return view('tasks.edit',compact('task'));
-   }
+     $task =  $this->taskRepository->findTask($id );
+     return view('tasks.edit',compact('task'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(TaskUpdateRequest $request,$id)
     {
-        $validated = $request->validated(); 
+        $validated = $request->validated(); // validate data  
         $this->taskRepository->updateTask($validated ,$id);
         return redirect()->route('tasks.index')->with('success','Task Updated Successfully.');
     }
@@ -87,32 +87,32 @@ class TaskController extends Controller
         $this->taskRepository->destroyTask($id);
         return redirect()->route('tasks.index')->with('success','Task Deleted Successfully.');
     }
-    public function test()
-    {
-        DB::beginTransaction();
-        try {
-            $client     = new  Client();
-            $responce   = $client->get(env('APIURL'));
-            $status     = $responce->getStatusCode();
-            $tasks      = json_decode($responce->getBody(),true);
-            
-            if ($status == 200) {
-                if (count($tasks)) {
-                 foreach ($tasks as $key => $task) {
-                     $task = Task::updateOrCreate([
-                        'api_id' => $task['id']
-                    ], [
-                        'title' => substr($task['title'], 0,10),
-                        'description' => $task['title'],
-                        'status' => ($task['completed'] == true ? "completed" : "pending"),
-                    ]);
-                 }
-             }
-         }
-         DB::commit();
-     } catch (Exception $e) {
-        
+    // public function test()
+    // {
+   //      DB::beginTransaction();
+   //      try {
+   //          $client     = new  Client();
+   //          $responce   = $client->get(env('APIURL')); 
+   //          $status     = $responce->getStatusCode();
+   //          $tasks      = json_decode($responce->getBody(),true);
 
-     }
- }
+   //          if ($status == 200) { // check api responce status
+   //              if (count($tasks)) {
+   //                 foreach ($tasks as $key => $task) {
+   //                     $task = Task::updateOrCreate([
+   //                      'api_id' => $task['id']
+   //                  ], [
+   //                      'title' => substr($task['title'], 0,10), // i am consider title first 10 char as a title 
+   //                      'description' => $task['title'], // i am consider title  as a description 
+   //                      'status' => ($task['completed'] == true ? "completed" : "pending"),
+   //                  ]);
+   //                 }
+   //             }
+   //         }
+   //         DB::commit();
+   //     } catch (Exception $e) {
+
+
+   //     }
+   // }
 }
